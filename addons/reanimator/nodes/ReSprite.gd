@@ -1,5 +1,5 @@
 class_name ReSprite
-extends Node
+extends Sprite2D
 
 @export
 var fps: int = 1
@@ -12,6 +12,8 @@ var ticker: Timer
 @export
 var drivers: Array[Driver]
 
+var current: ReAnimation = null
+
 func _ready():
 	ticker = Timer.new()
 	ticker.wait_time = 1/fps
@@ -20,7 +22,6 @@ func _ready():
 	)
 	ticker.autostart = true
 	add_child(ticker)
-	print(ticker)
 
 func add_driver(name, value):
 	for d in drivers:
@@ -28,18 +29,21 @@ func add_driver(name, value):
 			d.value = value
 			return
 	drivers.append(Driver.new(name, value))
-	print(drivers)
 
 func remove_driver(name):
 	for d in len(drivers):
-		print(drivers[d].name)
 		if drivers[d].name == name:
 			drivers.remove_at(d)
-			print("Removed: ", d)
 			return
 
 func resolve_tree():
-	print(get_next(root))
+	var r = get_next(root)
+	if r is ReAnimation:
+		if r != current and current != null:
+			current.cleanup(drivers)
+		var cell = r.get_cell(drivers)
+		if cell != null:
+			texture = cell.tex
 	
 func get_next(switch: Switch):
 	var r = switch.select(drivers)

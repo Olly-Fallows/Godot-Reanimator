@@ -1,37 +1,70 @@
-[gd_scene load_steps=8 format=3 uid="uid://dd31p4h2lkdfn"]
+[gd_scene load_steps=17 format=3 uid="uid://dd31p4h2lkdfn"]
 
 [ext_resource type="Script" path="res://addons/reanimator/nodes/ReSprite.gd" id="1_d0kw8"]
 [ext_resource type="Script" path="res://Testing.gd" id="1_y64ic"]
 [ext_resource type="Script" path="res://addons/reanimator/nodes/Switch.gd" id="2_bihs3"]
 [ext_resource type="Script" path="res://addons/reanimator/nodes/Driver.gd" id="3_u88nm"]
 [ext_resource type="Script" path="res://addons/reanimator/nodes/ReAnimation.gd" id="5_hodbp"]
+[ext_resource type="Script" path="res://addons/reanimator/nodes/Cell.gd" id="5_w3tsp"]
+[ext_resource type="Texture2D" uid="uid://cyhhagf4putpl" path="res://test.png" id="7_oqtuo"]
 
-[sub_resource type="Resource" id="Resource_j3t31"]
+[sub_resource type="Resource" id="Resource_mdarh"]
 script = ExtResource("3_u88nm")
-name = "is_walking"
+name = "is_moving"
 value = -1
 
-[sub_resource type="Resource" id="Resource_4jv5e"]
-script = ExtResource("3_u88nm")
-name = "is_running"
-value = -1
+[sub_resource type="AtlasTexture" id="AtlasTexture_m65t4"]
+atlas = ExtResource("7_oqtuo")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="Resource" id="Resource_y1tif"]
+script = ExtResource("5_w3tsp")
+tex = SubResource("AtlasTexture_m65t4")
+conditions = Array[ExtResource("3_u88nm")]([])
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0hjb5"]
+atlas = ExtResource("7_oqtuo")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="Resource" id="Resource_dpnls"]
+script = ExtResource("5_w3tsp")
+tex = SubResource("AtlasTexture_0hjb5")
+conditions = Array[ExtResource("3_u88nm")]([])
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ic5td"]
+atlas = ExtResource("7_oqtuo")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="Resource" id="Resource_iwdpj"]
+script = ExtResource("5_w3tsp")
+tex = SubResource("AtlasTexture_ic5td")
+conditions = Array[ExtResource("3_u88nm")]([])
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c1263"]
+atlas = ExtResource("7_oqtuo")
+region = Rect2(0, 16, 16, 16)
+
+[sub_resource type="Resource" id="Resource_5a5w3"]
+script = ExtResource("5_w3tsp")
+tex = SubResource("AtlasTexture_c1263")
+conditions = Array[ExtResource("3_u88nm")]([])
 
 [node name="Testing" type="Node2D"]
 script = ExtResource("1_y64ic")
 
-[node name="ReSprite" type="Node" parent="."]
+[node name="ReSprite" type="Sprite2D" parent="."]
+position = Vector2(364, 190)
+scale = Vector2(3, 3)
 script = ExtResource("1_d0kw8")
 
 [node name="Switch" type="Node" parent="ReSprite"]
 script = ExtResource("2_bihs3")
 
-[node name="Walk" type="Node" parent="ReSprite/Switch"]
+[node name="Run" type="Node" parent="ReSprite/Switch"]
 script = ExtResource("5_hodbp")
-conditions = Array[ExtResource("3_u88nm")]([SubResource("Resource_j3t31")])
+conditions = Array[ExtResource("3_u88nm")]([SubResource("Resource_mdarh")])
+cells = Array[ExtResource("5_w3tsp")]([SubResource("Resource_y1tif"), SubResource("Resource_dpnls"), SubResource("Resource_iwdpj")])
 
 [node name="Idle" type="Node" parent="ReSprite/Switch"]
 script = ExtResource("5_hodbp")
-
-[node name="Run" type="Node" parent="ReSprite/Switch"]
-script = ExtResource("5_hodbp")
-conditions = Array[ExtResource("3_u88nm")]([SubResource("Resource_4jv5e")])
+cells = Array[ExtResource("5_w3tsp")]([SubResource("Resource_5a5w3")])
